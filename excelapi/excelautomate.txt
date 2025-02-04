@@ -1,0 +1,55 @@
+async function main(workbook: ExcelScript.Workbook) {
+    let sheet = workbook.getActiveWorksheet();
+
+    // Read date from cell A1
+    let dateCell: ExcelScript.Range = sheet.getRange("A2");
+    let dateStr: string = dateCell.getText().trim();
+
+    // Construct API URL
+    let url: string = `https://outis.pythonanywhere.com/api/sentiment/?date=${dateStr}`;
+
+    try {
+        // Fetch data from API
+        let response: Response = await fetch(url);
+
+        // Check if the response is valid (status code 200)
+        if (!response.ok) {
+            throw new Error(`API Error: ${response.status} - ${response.statusText}`);
+        }
+
+        // Check if the response is JSON
+        const contentType = response.headers.get("content-type");
+        if (!contentType?.includes("application/json")) {
+            throw new Error("API returned non-JSON response (e.g., HTML/error page)");
+        }
+
+        // Define the expected structure of the API response
+        interface SentimentData {
+            planet: string;
+            sentiment: string;
+            sign: string;
+            motion: string;
+        }
+
+        // Parse response
+        let data: SentimentData[] = await response.json();
+
+        // Find Jupiter's sentiment
+        let sentiment: string = "No data found";
+        for (let item of data) {
+            if (item.planet === "Jupiter") {
+                sentiment = item.sentiment;
+                break;
+            }
+        }
+
+        // Write result to cell B1
+        sheet.getRange("B2").setValue(sentiment);
+    } catch (error) {
+        // Handle errors (e.g., network issues, invalid JSON)
+        sheet.getRange("B1").setValue("Error: Failed to fetch data");
+
+        // Log the error message to the console (for debugging)
+        console.log(error.message || "Unknown error occurred");
+    }
+}
