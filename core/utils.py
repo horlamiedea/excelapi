@@ -112,11 +112,11 @@ def get_stock_data(date_str):
 
         if not stock_row.empty:
             stock_info = {
-                "Open": stock_row["Open"].values[0],
-                "High": stock_row["High"].values[0],
-                "Low": stock_row["Low"].values[0],
-                "Close": stock_row["Close"].values[0],
-                "Volume": stock_row["Volume"].values[0],
+                "Open": float(stock_row["Open"].values[0]),
+                "High": float(stock_row["High"].values[0]),
+                "Low": float(stock_row["Low"].values[0]),
+                "Close": float(stock_row["Close"].values[0]),
+                "Volume": int(stock_row["Volume"].values[0]),
             }
 
             print(stock_info)
