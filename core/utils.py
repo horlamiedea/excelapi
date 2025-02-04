@@ -2,9 +2,7 @@ import swisseph as swe
 import datetime
 import pandas as pd
 import yfinance as yf
-from nsetools import Nse
 import os
-import requests
 
 csv_path = "cleaned_nifty_50_data.csv"
 
