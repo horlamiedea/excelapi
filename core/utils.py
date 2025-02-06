@@ -65,7 +65,7 @@ def evaluate_sentiment(date, planet):
     return {
         "planet": PLANET_NAMES[planet],
         "sentiment": "bullish" if sentiment_score > 0 else "bearish" if sentiment_score < 0 else "neutral",
-        # "percentage": round(sentiment_percentage, 2),
+        "percentage": round(sentiment_percentage, 2),
         "sign": ZODIAC_SIGNS[zodiac_sign],
         "motion": "retrograde" if retrograde else "direct"  # Indicates if the planet is in retrograde or direct motion
     }
